@@ -10,33 +10,77 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicJobsPublishRouteImport } from './routes/api/public/jobs/publish'
+import { Route as ApiPublicWorkerCallbackRouteImport } from './routes/api/public/worker/callback'
+import { Route as ApiPublicOauthPlatformCallbackRouteImport } from './routes/api/public/oauth/$platform.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsPublishRoute = ApiPublicJobsPublishRouteImport.update({
+  id: '/api/public/jobs/publish',
+  path: '/api/public/jobs/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicWorkerCallbackRoute = ApiPublicWorkerCallbackRouteImport.update({
+  id: '/api/public/worker/callback',
+  path: '/api/public/worker/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOauthPlatformCallbackRoute =
+  ApiPublicOauthPlatformCallbackRouteImport.update({
+    id: '/api/public/oauth/$platform/callback',
+    path: '/api/public/oauth/$platform/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/jobs/publish': typeof ApiPublicJobsPublishRoute
+  '/api/public/worker/callback': typeof ApiPublicWorkerCallbackRoute
+  '/api/public/oauth/$platform/callback': typeof ApiPublicOauthPlatformCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/jobs/publish': typeof ApiPublicJobsPublishRoute
+  '/api/public/worker/callback': typeof ApiPublicWorkerCallbackRoute
+  '/api/public/oauth/$platform/callback': typeof ApiPublicOauthPlatformCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/jobs/publish': typeof ApiPublicJobsPublishRoute
+  '/api/public/worker/callback': typeof ApiPublicWorkerCallbackRoute
+  '/api/public/oauth/$platform/callback': typeof ApiPublicOauthPlatformCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/public/jobs/publish'
+    | '/api/public/worker/callback'
+    | '/api/public/oauth/$platform/callback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/public/jobs/publish'
+    | '/api/public/worker/callback'
+    | '/api/public/oauth/$platform/callback'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/public/jobs/publish'
+    | '/api/public/worker/callback'
+    | '/api/public/oauth/$platform/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicJobsPublishRoute: typeof ApiPublicJobsPublishRoute
+  ApiPublicWorkerCallbackRoute: typeof ApiPublicWorkerCallbackRoute
+  ApiPublicOauthPlatformCallbackRoute: typeof ApiPublicOauthPlatformCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +92,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/publish': {
+      id: '/api/public/jobs/publish'
+      path: '/api/public/jobs/publish'
+      fullPath: '/api/public/jobs/publish'
+      preLoaderRoute: typeof ApiPublicJobsPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/worker/callback': {
+      id: '/api/public/worker/callback'
+      path: '/api/public/worker/callback'
+      fullPath: '/api/public/worker/callback'
+      preLoaderRoute: typeof ApiPublicWorkerCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/$platform/callback': {
+      id: '/api/public/oauth/$platform/callback'
+      path: '/api/public/oauth/$platform/callback'
+      fullPath: '/api/public/oauth/$platform/callback'
+      preLoaderRoute: typeof ApiPublicOauthPlatformCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicJobsPublishRoute: ApiPublicJobsPublishRoute,
+  ApiPublicWorkerCallbackRoute: ApiPublicWorkerCallbackRoute,
+  ApiPublicOauthPlatformCallbackRoute: ApiPublicOauthPlatformCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
