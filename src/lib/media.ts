@@ -41,8 +41,8 @@ export async function uploadResumable(bucket: string, path: string, file: File, 
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
   if (!token) throw new Error("You're signed out. Sign in again to upload.");
-  const base = import.meta.env.VITE_SUPABASE_URL as string;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+  const base = import.meta.env["VITE_SUPABASE_URL"] as string;
+  const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string;
   const viaTus = () =>
     new Promise<void>((resolve, reject) => {
       const up = new tus.Upload(file, {
@@ -57,7 +57,7 @@ export async function uploadResumable(bucket: string, path: string, file: File, 
         onProgress: (sent, total) => onProgress(Math.round((sent / total) * 100)),
         onSuccess: () => resolve(),
       });
-      up.findPreviousUploads().then((prev) => { if (prev.length) up.resumeFromPreviousUpload(prev[0]); up.start(); });
+      up.findPreviousUploads().then((prev) => { if (prev[0]) up.resumeFromPreviousUpload(prev[0]); up.start(); });
     });
   try {
     await viaTus();

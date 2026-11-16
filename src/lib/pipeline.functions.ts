@@ -99,7 +99,7 @@ export const detectClips = createServerFn({ method: "POST" })
           "You are a senior short-form video editor. From a timestamped transcript, pick self-contained moments that work as vertical social clips: strong opinions, arguments, funny moments, surprising statements, emotional reactions, clear explanations, stories, memorable quotes, high-energy exchanges. Each clip must start at the beginning of a thought and end on a payoff. Use only timestamps inside the transcript. Score 0-100 is your estimate of engagement potential relative to other moments in this video — never a guarantee. The reason must cite what happens in the moment. Titles under 70 characters, descriptions under 200 characters, 3-6 hashtags without spaces. Write in the transcript's language.",
         user: `Video: ${video.title}\nFind ${allowed} clips between ${data.minSeconds} and ${data.maxSeconds} seconds long.${avoid ? ` Do not overlap these existing clips (seconds): ${avoid}.` : ""}\n\nTranscript:\n${transcript.slice(0, 180000)}`,
       });
-      const maxT = Number(video.duration_seconds) || segments[segments.length - 1].end;
+      const maxT = Number(video.duration_seconds) || (segments[segments.length - 1]?.end ?? 0);
       const valid = out.clips
         .map((c) => ({ ...c, start_seconds: Math.max(0, c.start_seconds), end_seconds: Math.min(maxT, c.end_seconds) }))
         .filter((c) => c.end_seconds - c.start_seconds >= 3)
@@ -108,7 +108,7 @@ export const detectClips = createServerFn({ method: "POST" })
         const text = segments.filter((s) => s.end > c.start_seconds && s.start < c.end_seconds).map((s) => s.text).join(" ");
         const { data: m } = await supabase.from("detected_moments").insert({ user_id: userId, video_id: video.id, start_seconds: c.start_seconds, end_seconds: c.end_seconds, category: c.category, score: Math.max(0, Math.min(100, c.score)), reason: c.reason }).select("id").single();
         await supabase.from("clips").insert({
-          user_id: userId, video_id: video.id, moment_id: m?.id, title: c.title, description: c.description, transcript: text,
+          user_id: userId, video_id: video.id, moment_id: m?.id ?? null, title: c.title, description: c.description, transcript: text,
           start_seconds: c.start_seconds, end_seconds: c.end_seconds, score: Math.max(0, Math.min(100, c.score)), reason: c.reason,
           category: c.category, hashtags: c.hashtags.map((h) => h.replace(/^#/, "")),
         });

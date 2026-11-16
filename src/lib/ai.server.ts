@@ -61,7 +61,7 @@ export async function responsesJSON<T>(opts: { system: string; user: string; nam
   let err: string | null = null;
   let refused = false;
   await readSSE(res, (type, d) => {
-    if (type === "response.output_text.delta") text += String(d.delta ?? "");
+    if (type === "response.output_text.delta") text += String(d["delta"] ?? "");
     if (type === "response.refusal.delta") refused = true;
     if (type === "error" || type === "response.failed") err = (d as { message?: string }).message ?? "AI request failed";
   });
@@ -75,7 +75,7 @@ export async function responsesJSON<T>(opts: { system: string; user: string; nam
 export async function transcribeAudio(wav: Uint8Array, language?: string): Promise<string> {
   const form = new FormData();
   form.append("model", STT_MODEL);
-  form.append("file", new Blob([wav], { type: "audio/wav" }), "chunk.wav");
+  form.append("file", new Blob([wav as unknown as BlobPart], { type: "audio/wav" }), "chunk.wav");
   form.append("response_format", "json");
   form.append("stream", "true");
   if (language && language !== "auto") form.append("languages", language);
@@ -87,8 +87,8 @@ export async function transcribeAudio(wav: Uint8Array, language?: string): Promi
   if (!res.ok || !res.body) throw await failure(res);
   let text = "", final: string | null = null;
   await readSSE(res, (type, d) => {
-    if (type === "transcript.text.delta") text += String(d.delta ?? "");
-    if (type === "transcript.text.done") final = String(d.text ?? "");
+    if (type === "transcript.text.delta") text += String(d["delta"] ?? "");
+    if (type === "transcript.text.done") final = String(d["text"] ?? "");
   });
   return (final ?? text).trim();
 }

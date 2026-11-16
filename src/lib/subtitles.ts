@@ -62,8 +62,8 @@ export function buildCues(words: Word[], wordsPerLine: number, maxChars: number,
   const flush = () => {
     if (!cur.length) return;
     cues.push({
-      start: Math.max(0, cur[0].start - offset),
-      end: Math.max(0, cur[cur.length - 1].end - offset),
+      start: Math.max(0, (cur[0]?.start ?? 0) - offset),
+      end: Math.max(0, (cur[cur.length - 1]?.end ?? 0) - offset),
       text: cur.map((w) => w.text).join(" "),
       words: cur.map((w) => ({ ...w, start: w.start - offset, end: w.end - offset })),
     });

@@ -28,7 +28,7 @@ export async function extractAudioChunks(file: File, onProgress?: (msg: string) 
   for (let i = 0; i < pcm.length; i += per) {
     const slice = pcm.subarray(i, Math.min(i + per, pcm.length));
     let peak = 0;
-    for (let j = 0; j < slice.length; j += 50) peak = Math.max(peak, Math.abs(slice[j]));
+    for (let j = 0; j < slice.length; j += 50) peak = Math.max(peak, Math.abs(slice[j] ?? 0));
     chunks.push({ start: i / rate, end: (i + slice.length) / rate, wav: encodeWav(slice, rate), silent: peak < 0.01 });
   }
   return { duration: decoded.duration, chunks };
@@ -43,7 +43,7 @@ function encodeWav(samples: Float32Array, rate: number): Blob {
   v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
   w(36, "data"); v.setUint32(40, samples.length * 2, true);
   for (let i = 0; i < samples.length; i++) {
-    const s = Math.max(-1, Math.min(1, samples[i]));
+    const s = Math.max(-1, Math.min(1, samples[i] ?? 0));
     v.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
   }
   return new Blob([b], { type: "audio/wav" });
