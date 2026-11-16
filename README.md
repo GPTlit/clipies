@@ -1,14 +1,22 @@
-# Welcome to your Lovable project
+# Clipies
+
+Build a Complete AI Video Clipping & Social Media Automation SaaS based on the attached PRD specification.
+
+The product name is CLIPER. Use the attached logo and favicon image, and apply the attached design tokens for light mode and dark mode blur and surface effects.
+
+Now build the whole thing at once, leave nothing behind.
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://clipies.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/b0a70450-93c4-4d94-af2b-6844f58b00ac).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +28,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
